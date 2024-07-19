@@ -1,13 +1,13 @@
 # Inspired by https://github.com/onejar99/gitbook-build-publish-action
 
-function checkIfErr() {
-    ret=$?
-    echo "ret=[${ret}]"
-    if [ ! $ret = '0' ]; then
-        echo "Oops something wrong! exit code: ${ret}"
-        exit $ret;
-    fi
-}
+# function checkIfErr() {
+#     ret=$?
+#     echo "ret=[${ret}]"
+#     if [ ! $ret = '0' ]; then
+#         echo "Oops something wrong! exit code: ${ret}"
+#         exit $ret;
+#     fi
+# }
 
 echo '[INFO] Building static website...'
 cd ${GITHUB_WORKSPACE}
