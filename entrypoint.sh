@@ -1,45 +1,23 @@
-# Inspired by https://github.com/onejar99/gitbook-build-publish-action
-
-# function checkIfErr() {
-#     ret=$?
-#     echo "ret=[${ret}]"
-#     if [ ! $ret = '0' ]; then
-#         echo "Oops something wrong! exit code: ${ret}"
-#         exit $ret;
-#     fi
-# }
-
 echo '[INFO] Building static website...'
 cd ${GITHUB_WORKSPACE}
+git config --global --add safe.directory /github/workspace
 
 honkit build
-ls -alt _book/
 
-
-# checkout to the gh-pages branch
+echo '[INFO] Some magic to merge main into gh-pages...'
+git fetch origin gh-pages --depth 1
 git checkout gh-pages
+git rebase main
 
-# pull the latest updates
-git pull origin gh-pages --rebase
-
-# copy the static site files into the current directory.
 cp -R _book/* .
-
-# remove 'node_modules' and '_book' directory
 git clean -fx node_modules
 git clean -fx _book
-
-# add all files
 git add .
 
-git log
+git config --local user.name "Fudgedotdotdot"
+git config --local user.email "28399056+Fudgedotdotdot@users.noreply.github.com"
 
-
-# commit
-#git commit -a -m "Update docs"
-
-# push to the origin
-#git push origin gh-pages
-
-# checkout to the master branch
-#git checkout master
+echo '[INFO] Pushing gh-pages...'
+git commit -am "Updated with:  $(echo $GITHUB_SHA | cut -c1-7)"
+git push origin HEAD:gh-pages --force
+git checkout main
